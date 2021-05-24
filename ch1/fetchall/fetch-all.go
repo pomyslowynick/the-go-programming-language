@@ -1,49 +1,77 @@
-// Copyright © 2016 Alan A. A. Donovan & Brian W. Kernighan.
-// License: https://creativecommons.org/licenses/by-nc-sa/4.0/
-
-// See page 17.
-//!+
-
 // Fetchall fetches URLs in parallel and reports their times and sizes.
 package main
 
 import (
+	"bufio"
+	"encoding/csv"
 	"fmt"
 	"io"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 	"time"
 )
 
+// Exercise 1.11
+// Plenty of errors happening, I/O timeouts, TCP and TLS timeouts, handshake timeouts, request shutdowns.
+// Madness.
+// https://stackoverflow.com/questions/52017133/dial-tcp-i-o-timeout-on-simultaneous-requests#
 func main() {
-	start := time.Now()
-	ch := make(chan string)
-	for _, url := range os.Args[1:] {
-		go fetch(url, ch) // start a goroutine
+	f, err := os.Open("./top500Domains.csv")
+	if err != nil {
+		log.Fatal("Unable to read input file ", err)
 	}
-	for range os.Args[1:] {
-		fmt.Println(<-ch) // receive from channel ch
+	defer f.Close()
+
+	csvReader := csv.NewReader(bufio.NewReader(f))
+	if err != nil {
+		log.Fatal("Unable to parse file as CSV for ", err)
 	}
-	fmt.Printf("%.2fs elapsed\n", time.Since(start).Seconds())
+
+	ch := make(chan string, 3)
+	file, err2 := os.OpenFile("access.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+
+	if err2 != nil {
+		log.Fatal(err)
+	}
+
+	for {
+		line, error := csvReader.Read()
+		if error == io.EOF {
+			break
+		} else if error != nil {
+			log.Fatal(error)
+		}
+		go fetch(line[1], ch) // start a goroutine
+	}
+
+	for i := 1; i < 500; i++ {
+		if _, err := file.Write([]byte(<-ch)); err != nil {
+			log.Fatal(err)
+		}
+
+	}
+
+	if err := file.Close(); err != nil {
+		log.Fatal(err)
+	}
 }
 
 func fetch(url string, ch chan<- string) {
 	start := time.Now()
-	resp, err := http.Get(url)
+	resp, err := http.Get("http://" + url)
 	if err != nil {
-		ch <- fmt.Sprint(err) // send to channel ch
+		ch <- fmt.Sprint(err, "\n") // send to channel ch
 		return
 	}
 
 	nbytes, err := io.Copy(ioutil.Discard, resp.Body)
 	resp.Body.Close() // don't leak resources
 	if err != nil {
-		ch <- fmt.Sprintf("while reading %s: %v", url, err)
+		ch <- fmt.Sprintf("while reading %s: %v\n", url, err)
 		return
 	}
 	secs := time.Since(start).Seconds()
-	ch <- fmt.Sprintf("%.2fs  %7d  %s", secs, nbytes, url)
+	ch <- fmt.Sprintf("%.2fs  %7d  %s\n", secs, nbytes, url)
 }
-
-//!-
