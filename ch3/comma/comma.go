@@ -7,7 +7,18 @@ import (
 	"os"
 )
 
+type Flags uint
+
+const (
+	FlagUp Flags = 1 << iota
+	FlagBroadcast
+	FlagLoopback
+	FlagPointToPoint
+	FlagMulticast
+)
+
 func main() {
+	fmt.Printf("%d %d %d %d %d\n", FlagUp, FlagBroadcast, FlagLoopback, FlagPointToPoint, FlagMulticast)
 	input := bufio.NewScanner(os.Stdin)
 	for input.Scan() {
 		fmt.Println(nonRecursiveComma(input.Text()))
