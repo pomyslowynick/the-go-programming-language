@@ -23,11 +23,17 @@ func comma(s string) string {
 }
 
 // Exercise 3.10
+// Exercise 3.11
 // TODO: Issue when number is not divisible by 3.
 func nonRecursiveComma(s string) string {
 	var buf bytes.Buffer
+	dotFlag := false
 	for i, v := range s {
-		if i%3 == 0 && i != 0 {
+		if v == '.' {
+			dotFlag = true
+		}
+
+		if i%3 == 0 && i != 0 && !dotFlag {
 			buf.WriteString(",")
 		}
 		buf.WriteRune(v)
