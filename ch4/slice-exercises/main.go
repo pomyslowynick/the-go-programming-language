@@ -41,18 +41,25 @@ func rotate(s []int) {
 	reverse(sliceSFirstHalf)
 }
 
-// Exercise 4.5
+// Exercise 4.5 - That was a fun one! GOT HIM!
 func removeAdjacent(s []string) []string {
-	for index, item := range s {
-		fmt.Printf("%d index, %s item\n", index, item)
-		if index != len(s)-1 && item == s[index+1] {
-			copy(s[index:], s[index+1:])
-			s = s[:len(s)-1]
+	j := len(s) - 1
+	for i := 0; i < j; i++ {
+		if i != len(s)-1 && s[i] == s[i+1] {
+			s = remove(s, i+1)
+			j -= 1
+		}
+		if i != 0 && s[i] == s[i-1] {
+			s = remove(s, i-1)
+			j -= 1
 		}
 	}
-	return s
+	return s[:j+1]
 }
-
+func remove(slice []string, i int) []string {
+	copy(slice[i:], slice[i+1:])
+	return slice[:len(slice)-1]
+}
 func reverse(s []int) {
 	for i, j := 0, len(s)-1; i < j; i, j = i+1, j-1 {
 		s[i], s[j] = s[j], s[i]
