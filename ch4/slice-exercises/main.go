@@ -15,7 +15,7 @@ func main() {
 	rotate(s)
 	fmt.Println(s)
 
-	stringsArr := []string{"Word", "Word", "Word", "newWord", "oldWord", "Word", "newWord"}
+	stringsArr := []string{"Word", "Word", "Word", "Word", "Word", "Word", "Word", "Word", "newWord", "oldWord", "Word", "Word", "newWord"}
 	stringArr := removeAdjacent(stringsArr)
 	fmt.Println(stringArr)
 
@@ -42,24 +42,29 @@ func rotate(s []int) {
 }
 
 // Exercise 4.5 - That was a fun one! GOT HIM!
+// Huh, still not working for some cases
+// The moving index wasn't working correctly for more than 3 adjacent words
 func removeAdjacent(s []string) []string {
 	j := len(s) - 1
 	for i := 0; i < j; i++ {
 		if i != len(s)-1 && s[i] == s[i+1] {
-			s = remove(s, i+1)
+			s = remove(s, i)
 			j -= 1
-		}
-		if i != 0 && s[i] == s[i-1] {
-			s = remove(s, i-1)
+			i -= 1
+		} else if i != 0 && s[i] == s[i-1] {
+			s = remove(s, i)
 			j -= 1
+			i -= 1
 		}
 	}
 	return s[:j+1]
 }
+
 func remove(slice []string, i int) []string {
 	copy(slice[i:], slice[i+1:])
 	return slice[:len(slice)-1]
 }
+
 func reverse(s []int) {
 	for i, j := 0, len(s)-1; i < j; i, j = i+1, j-1 {
 		s[i], s[j] = s[j], s[i]
