@@ -6,6 +6,7 @@ import (
 	"os"
 )
 
+// Exercise 4.9
 func main() {
 	input := bufio.NewScanner(os.Stdin)
 	wordsCount := 0
