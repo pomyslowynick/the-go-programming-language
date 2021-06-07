@@ -1,10 +1,23 @@
 // Package treesort provides insertion sort using an unbalanced binary tree.
 package main
 
-func main() {
-	TestSort
-}
+import "fmt"
+
 //!+
+
+func main() {
+	t := new(tree)
+	val := []int{1, 23, 4}
+	add(t, 2)
+	add(t, 3)
+	add(t, -1)
+	values := appendValues(val, t)
+	fmt.Println(values)
+	Sort(values)
+	fmt.Println(values)
+
+}
+
 type tree struct {
 	value       int
 	left, right *tree
@@ -43,17 +56,6 @@ func add(t *tree, value int) *tree {
 		t.right = add(t.right, value)
 	}
 	return t
-}
-
-func TestSort(t *testing.T) {
-	data := make([]int, 50)
-	for i := range data {
-		data[i] = rand.Int() % 50
-	}
-	treesort.Sort(data)
-	if !sort.IntsAreSorted(data) {
-		t.Errorf("not sorted: %v", data)
-	}
 }
 
 //!-
