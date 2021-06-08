@@ -17,6 +17,7 @@ type DatedIssues struct {
 }
 
 //!+
+// Exercise 4.10
 func main() {
 	datedIssues := new(DatedIssues)
 
