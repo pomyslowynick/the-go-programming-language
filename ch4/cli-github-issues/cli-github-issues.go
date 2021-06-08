@@ -132,7 +132,10 @@ func createIssue(repoOwner, repoName string) (*Issue, error) {
 		os.Exit(1)
 	}
 
-	fmt.Printf("%d status code \n", resp.StatusCode)
+	if resp.StatusCode != 200 {
+		fmt.Printf("Status code undesirable: %d\n", resp.StatusCode)
+		os.Exit(1)
+	}
 
 	var result *Issue
 	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
@@ -164,6 +167,11 @@ func readIssue(repoOwner, repoName string) (*Issue, error) {
 	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
 		resp.Body.Close()
 		return nil, err
+	}
+
+	if resp.StatusCode != 200 {
+		fmt.Printf("Status code undesirable: %d\n", resp.StatusCode)
+		os.Exit(1)
 	}
 
 	resp.Body.Close()
@@ -206,7 +214,10 @@ func updateIssue(repoOwner, repoName string) (*Issue, error) {
 		os.Exit(1)
 	}
 
-	fmt.Printf("%d status code \n", resp.StatusCode)
+	if resp.StatusCode != 200 {
+		fmt.Printf("Status code undesirable: %d\n", resp.StatusCode)
+		os.Exit(1)
+	}
 
 	var result *Issue
 	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
@@ -245,7 +256,10 @@ func closeIssue(repoOwner, repoName string) (*Issue, error) {
 		os.Exit(1)
 	}
 
-	fmt.Printf("%d status code \n", resp.StatusCode)
+	if resp.StatusCode != 200 {
+		fmt.Printf("Status code undesirable: %d\n", resp.StatusCode)
+		os.Exit(1)
+	}
 
 	var result *Issue
 	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
