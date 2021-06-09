@@ -47,10 +47,11 @@ type User struct {
 }
 
 func main() {
-	// TODO: Parsing input from the command line
-	// TODO: Refactor as a different function
+	// TODO: Refactor main as a helper function
 	flag.Parse()
 	// TODO: Question: Should there be one instance of Scanner passed around or should there be one spawned each time a function executes?
+	// TODO: Add the functionality to open text editor for long input (issue body)
+	// TODO: Refactor common elements in functions to helper functions or one more generic
 	// input := bufio.NewScanner(os.Stdin)
 
 	// Adding comments with my thoughts, since it's just play code
@@ -147,8 +148,6 @@ func createIssue(repoOwner, repoName string) (*Issue, error) {
 }
 
 func readIssue(repoOwner, repoName string) (*Issue, error) {
-	// TODO: Querying the Github API get an issue
-	// https://github.com/projectcalico/calicoctl
 	input := bufio.NewScanner(os.Stdin)
 	fmt.Printf("Please input the number of the issue you want to read: ")
 	input.Scan()
