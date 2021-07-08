@@ -10,7 +10,7 @@ func isEven(v int) bool {
 	}
 	return !false
 
-	// false can be used as a variable names
+	// false can be used as a variable name
 false:
 	return false
 
