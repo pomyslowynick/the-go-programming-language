@@ -1,0 +1,16 @@
+https://google.com
+http://golang.org/issues/new?title=x/website:
+http://www.google.com/intl/en/policies/privacy/
+/doc/tos.html
+/doc/copyright.html
+https://blog.golang.org/
+https://tour.golang.org/
+/dl/
+/
+https://play.golang.org/
+/blog/
+/help/
+/project/
+/pkg/
+/doc/
+https://support.eji.org/give/153413/#!/donation/checkout
